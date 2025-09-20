@@ -1,3 +1,7 @@
+using Glossary.Infrastructure.Data;
+using System;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +12,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();  
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<AppDbContext>(opts =>
+    opts.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
