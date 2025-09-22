@@ -19,5 +19,7 @@ namespace Glossary.Application.Interfaces
 
         Task<Term?> GetByIdAsync(Guid TermId, CancellationToken ct);
 
+        void Delete(Term term);
+
     }
 }

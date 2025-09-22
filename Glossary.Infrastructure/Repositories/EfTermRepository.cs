@@ -27,5 +27,7 @@ namespace Glossary.Infrastructure.Repositories
         {
            return await _db.Terms.FirstOrDefaultAsync(t => t.Id == TermId);
         }
+
+        public void Delete(Term term) => _db.Terms.Remove(term);
     }
 }

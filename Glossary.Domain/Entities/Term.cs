@@ -49,6 +49,23 @@ namespace Glossary.Domain.Entities
             Status = Status.Published;
         }
 
+        public void Archive()
+        {
+            if (Status != Status.Published)
+                throw new InvalidOperationException("Only Published terms can be archived.");
+
+            Status = Status.Archived;
+        }
+
+        public void Delete(Guid requesterId)
+        {
+            if (Status != Status.Draft)
+                throw new InvalidOperationException("Only Draft can be deleted.");
+            if (requesterId != AuthorId)
+                throw new InvalidOperationException("Only author can delete own draft.");
+
+        }
+
 
     }
 }

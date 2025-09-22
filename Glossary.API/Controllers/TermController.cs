@@ -18,7 +18,7 @@ namespace Glossary.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
+        [HttpPost("/createterm")]
         [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateTermModel request)
         {
@@ -30,14 +30,29 @@ namespace Glossary.API.Controllers
         public async Task<List<TermDto>> GetAllTerms()
         {
             var terms = await _mediator.Send(new GetTermsQuery());
-            return terms.ToList();
+            return terms.OrderBy(x=>x.Name).ToList();
         }
 
         [HttpPost("{id:guid}/publish")]
-        public async Task<IActionResult> Publish([FromBody] Guid TermId)
+        public async Task<IActionResult> Publish([FromRoute] Guid id, CancellationToken ct)
         {
-           await  _mediator.Send(new PublishTermComand(TermId));
-            return Ok();
+            await _mediator.Send(new PublishTermComand(id), ct);
+            return NoContent();
+        }
+
+        [HttpPost("{id:guid}/archive")]
+        public async Task<IActionResult> Archive([FromRoute] Guid id, CancellationToken ct)
+        {
+            await _mediator.Send(new ArchiveTermComand(id), ct);
+            return NoContent();
+        }
+
+        [HttpDelete("{id:guid}/delete")]
+        [Authorize]
+        public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+        {           
+            await _mediator.Send(new DeleteTermComand(id), ct);
+            return NoContent(); 
         }
     }
 }
