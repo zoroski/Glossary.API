@@ -19,6 +19,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<ITermRepository, EfTermRepository>();
 builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
+builder.Services.AddScoped<ICurrentUser, HttpContextCurrentUser>();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile<GlossaryProfile>();
