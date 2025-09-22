@@ -30,8 +30,6 @@ namespace Glossary.Infrastructure.Data
                 .IsRequired();
 
             b.Property(x => x.Status)
-                .HasConversion<string>()
-                .HasMaxLength(20)
                 .IsRequired();
 
             b.Property(x => x.AuthorId)

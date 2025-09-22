@@ -13,8 +13,29 @@ namespace Glossary.Domain.Entities
 
         public string Definition { get; set; }
 
-        public string Status { get; set; }
+        public Status Status { get; set; }
 
         public Guid AuthorId { get; set; }
+
+
+        public static Term Create(string name, string definition, Guid authorId)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name is required");
+
+            if (string.IsNullOrWhiteSpace(definition))
+                throw new ArgumentException("Definition is required");
+
+            return new Term
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                Definition = definition,
+                Status = Glossary.Domain.Status.Draft,
+                AuthorId = authorId,
+                CreatedAt = DateTime.UtcNow
+            };
+        }
+
     }
 }
