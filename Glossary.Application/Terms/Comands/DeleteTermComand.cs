@@ -1,4 +1,5 @@
-﻿using Glossary.Application.Interfaces;
+﻿using Glossary.Application.Common.CQRS;
+using Glossary.Application.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace Glossary.Application.Terms.Comands
 {
 
-    public record DeleteTermComand(Guid TermId) : IRequest<bool>;
+    public record DeleteTermComand(Guid TermId) : ICommand<bool>;
 
     public class DeleteTermHendler : IRequestHandler<DeleteTermComand, bool>
     {
@@ -26,9 +27,6 @@ namespace Glossary.Application.Terms.Comands
 
         public async Task<bool> Handle(DeleteTermComand request, CancellationToken cancellationToken)
         {
-            if (!_auth.IsAuthenticated || _auth.UserId == Guid.Empty)
-                throw new AuthenticationException("User must be authenticated to publish a term.");
-
             var term = await _repo.GetByIdAsync(request.TermId, cancellationToken) ?? throw new KeyNotFoundException("Term not found.");
             term.Delete(_auth.UserId);
             _repo.Delete(term);

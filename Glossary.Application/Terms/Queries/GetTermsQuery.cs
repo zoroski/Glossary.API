@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Glossary.Application.Common.CQRS;
 using Glossary.Application.Interfaces;
 using Glossary.Domain.Dto;
 using Glossary.Domain.Entities;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Glossary.Application.Terms.Queries
 {
-    public record GetTermsQuery() : IRequest<IReadOnlyList<TermDto>>;
+    public record GetTermsQuery() : IQuery<IReadOnlyList<TermDto>>;
 
     public sealed class GetTermsHandler : IRequestHandler<GetTermsQuery, IReadOnlyList<TermDto>>
     {

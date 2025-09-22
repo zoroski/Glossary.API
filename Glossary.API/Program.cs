@@ -1,5 +1,6 @@
 using AutoMapper;
 using Glossary.API.Middleware;
+using Glossary.Application.Common.Behaviors;
 using Glossary.Application.Interfaces;
 using Glossary.Application.Terms.Comands;
 using Glossary.Application.Terms.Specifications;
@@ -7,6 +8,7 @@ using Glossary.Domain.Entities.Spec;
 using Glossary.Infrastructure.Data;
 using Glossary.Infrastructure.Mapping;
 using Glossary.Infrastructure.Repositories;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -82,13 +84,13 @@ builder.Services
 
 
 builder.Services.AddEndpointsApiExplorer();  
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(opts =>
     opts.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(CreateTermHandler).Assembly));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
 
 var app = builder.Build();
 

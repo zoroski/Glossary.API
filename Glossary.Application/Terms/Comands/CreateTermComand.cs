@@ -21,9 +21,6 @@ namespace Glossary.Application.Terms.Comands
 
         public async Task<Guid> Handle(CreateTermComand req, CancellationToken ct)
         {
-            if (!_auth.IsAuthenticated || _auth.UserId == Guid.Empty)
-                throw new AuthenticationException("User must be authenticated to create a term.");
-
             var term = Term.Create(req.Name, req.Definition, _auth.UserId);
             _repo.Add(term);
             await _uow.SaveChangesAsync(ct);
