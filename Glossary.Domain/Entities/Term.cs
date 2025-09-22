@@ -1,4 +1,5 @@
 ﻿using Glossary.Domain.Common;
+using Glossary.Domain.Entities.Spec;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,18 @@ namespace Glossary.Domain.Entities
                 CreatedAt = DateTime.UtcNow
             };
         }
+
+        public void Publish(IPublishableSpecification spec)
+        {
+            if (Status != Status.Draft)
+                throw new InvalidOperationException("Only Draft terms can be published.");
+
+            if (!spec.IsSatisfiedBy(this, out var reason))
+                throw new InvalidOperationException($"Term is not publishable. {reason}");
+
+            Status = Status.Published;
+        }
+
 
     }
 }

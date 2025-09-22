@@ -19,7 +19,7 @@ namespace Glossary.API.Controllers
         }
 
         [HttpPost]
-       
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateTermModel request)
         {
             var id = await _mediator.Send(new CreateTermComand(request.Name, request.Definition));
@@ -31,6 +31,13 @@ namespace Glossary.API.Controllers
         {
             var terms = await _mediator.Send(new GetTermsQuery());
             return terms.ToList();
+        }
+
+        [HttpPost("{id:guid}/publish")]
+        public async Task<IActionResult> Publish([FromBody] Guid TermId)
+        {
+           await  _mediator.Send(new PublishTermComand(TermId));
+            return Ok();
         }
     }
 }

@@ -1,6 +1,9 @@
 using AutoMapper;
+using Glossary.API.Middleware;
 using Glossary.Application.Interfaces;
 using Glossary.Application.Terms.Comands;
+using Glossary.Application.Terms.Specifications;
+using Glossary.Domain.Entities.Spec;
 using Glossary.Infrastructure.Data;
 using Glossary.Infrastructure.Mapping;
 using Glossary.Infrastructure.Repositories;
@@ -20,6 +23,8 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ITermRepository, EfTermRepository>();
 builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 builder.Services.AddScoped<ICurrentUser, HttpContextCurrentUser>();
+builder.Services.AddScoped<IPublishableSpecification, PublishableTermSpecification>();
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAutoMapper(cfg =>
@@ -87,6 +92,7 @@ builder.Services.AddMediatR(cfg =>
 
 var app = builder.Build();
 
+ app.UseMiddleware<ExceptionMappingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

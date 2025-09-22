@@ -21,5 +21,11 @@ namespace Glossary.Infrastructure.Repositories
         public void Add(Term term) => _db.Terms.Add(term);
 
         public IQueryable<Term> GetAll() => _db.Terms.AsNoTracking();
+
+
+        public async Task<Term?> GetByIdAsync(Guid TermId, CancellationToken ct)
+        {
+           return await _db.Terms.FirstOrDefaultAsync(t => t.Id == TermId);
+        }
     }
 }

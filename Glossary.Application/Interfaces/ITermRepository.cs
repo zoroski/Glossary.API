@@ -1,4 +1,5 @@
-﻿using Glossary.Domain.Entities;
+﻿using Glossary.Domain.Dto;
+using Glossary.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace Glossary.Application.Interfaces
         void Add(Term term);
 
         IQueryable<Term> GetAll();
+
+        Task<Term?> GetByIdAsync(Guid TermId, CancellationToken ct);
 
     }
 }
