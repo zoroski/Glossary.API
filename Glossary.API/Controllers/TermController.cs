@@ -18,8 +18,8 @@ namespace Glossary.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("/createterm")]
-        [Authorize]
+        [HttpPost("createterm")]
+     
         public async Task<IActionResult> Create([FromBody] CreateTermModel request)
         {
             var id = await _mediator.Send(new CreateTermComand(request.Name, request.Definition));
@@ -48,7 +48,7 @@ namespace Glossary.API.Controllers
         }
 
         [HttpDelete("{id:guid}/delete")]
-        [Authorize]
+
         public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
         {           
             await _mediator.Send(new DeleteTermComand(id), ct);

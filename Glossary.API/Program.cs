@@ -82,7 +82,13 @@ builder.Services
         };
     });
 
-
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("ng", p => p
+        .WithOrigins("http://localhost:4200")
+        .AllowAnyHeader()
+        .AllowAnyMethod());
+});
 builder.Services.AddEndpointsApiExplorer();  
 
 builder.Services.AddDbContext<AppDbContext>(opts =>
@@ -108,7 +114,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCors("ng");
 app.MapControllers();
 
 app.Run();

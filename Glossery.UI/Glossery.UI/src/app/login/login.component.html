@@ -1,0 +1,18 @@
+<div class="login-card">
+  <h2>Sign in</h2>
+  <form (ngSubmit)="submit()">
+    <label>
+      Username
+      <input [(ngModel)]="username" name="username" required />
+    </label>
+
+    <label>
+      Password
+      <input [(ngModel)]="password" name="password" type="password" required />
+    </label>
+
+    <button [disabled]="busy" type="submit">Sign in</button>
+  </form>
+
+  <div class="error" *ngIf="error">{{ error }}</div>
+</div>
