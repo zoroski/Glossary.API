@@ -27,8 +27,8 @@ namespace Glossary.Application.Terms.Queries
 
         public async Task<IReadOnlyList<TermDto>> Handle(GetTermsQuery request, CancellationToken cancellationToken)
         {
-           var terms  = _repo.GetAll();
-            return _mapper.Map<List<TermDto>>(terms.OrderBy(t => t.Name));
+           var terms  = _repo.GetAll().ToList();
+            return _mapper.Map<List<TermDto>>(terms);
         }
 
     }
