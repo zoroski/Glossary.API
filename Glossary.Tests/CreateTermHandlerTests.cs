@@ -1,6 +1,7 @@
 ﻿using Glossary.Application.Interfaces;
 using Glossary.Application.Terms.Comands;
 using Glossary.Domain.Entities;
+using Glossary.Tests.Helpers;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,8 @@ namespace Glossary.Tests
         [Fact]
         public async Task Handle_Creates_Term_And_Saves()
         {
-            var repo = Substitute.For<ITermRepository>();
-            var uow = Substitute.For<IUnitOfWork>();
-            var auth = Substitute.For<ICurrentUser>();
+            var (repo, uow, auth) = TestHelper.MockResources();
+
             auth.UserId.Returns(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
 
             var handler = new CreateTermHandler(repo, uow, auth);

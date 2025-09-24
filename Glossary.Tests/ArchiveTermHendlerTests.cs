@@ -2,6 +2,7 @@
 using Glossary.Application.Terms.Comands;
 using Glossary.Domain.Entities;
 using Glossary.Domain.Entities.Spec;
+using Glossary.Tests.Helpers;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -16,16 +17,9 @@ namespace Glossary.Tests
         [Fact]
         public async Task Handle_Archives_Term_And_Saves()
         {
-            var repo = Substitute.For<ITermRepository>();
-            var uow = Substitute.For<IUnitOfWork>();
-            var auth = Substitute.For<ICurrentUser>();
+            var (repo, uow, auth) = TestHelper.MockResources();
 
-            var term = Term.Create("name", new string('x', 40), Guid.NewGuid());
-
-          
-            var pubSpec = Substitute.For<IPublishableSpecification>();
-             pubSpec.IsSatisfiedBy(Arg.Any<Term>(),out string? reason).Returns(true);
-            term.Publish(pubSpec);
+            var term = TestHelper.Published();
 
             repo.GetByIdAsync(term.Id, Arg.Any<CancellationToken>()).Returns(term);
 
@@ -41,11 +35,9 @@ namespace Glossary.Tests
         [Fact]
         public async Task Handle_Archive_When_Not_Published_Throws()
         {
-            var repo = Substitute.For<ITermRepository>();
-            var uow = Substitute.For<IUnitOfWork>();
-            var auth = Substitute.For<ICurrentUser>();
+            var (repo, uow, auth) = TestHelper.MockResources();
 
-            var term = Term.Create("name", new string('x', 40), Guid.NewGuid());
+            var term = TestHelper.Draft();
 
             repo.GetByIdAsync(term.Id, Arg.Any<CancellationToken>()).Returns(term);
 

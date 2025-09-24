@@ -2,6 +2,7 @@
 using Glossary.Application.Terms.Comands;
 using Glossary.Domain.Entities;
 using Glossary.Domain.Entities.Spec;
+using Glossary.Tests.Helpers;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,12 @@ namespace Glossary.Tests
         [Fact]
         public async Task Handle_Publishes_Term_And_Saves()
         {
-            var repo = Substitute.For<ITermRepository>();
-            var uow = Substitute.For<IUnitOfWork>();
-            var auth = Substitute.For<ICurrentUser>();
+            var (repo, uow, auth) = TestHelper.MockResources();
+
             var pubSpec = Substitute.For<IPublishableSpecification>();
             pubSpec.IsSatisfiedBy(Arg.Any<Term>(), out string? reason).Returns(true);
-           
-            var term = Term.Create("name", new string('x', 40), Guid.NewGuid());
+
+            var term = TestHelper.Draft();
             repo.GetByIdAsync(term.Id, Arg.Any<CancellationToken>()).Returns(term);
 
             var handler = new PublishTermmHandler(repo, uow, auth, pubSpec);

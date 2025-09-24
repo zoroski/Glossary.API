@@ -1,6 +1,7 @@
 ﻿using Glossary.Application.Interfaces;
 using Glossary.Application.Terms.Comands;
 using Glossary.Domain.Entities;
+using Glossary.Tests.Helpers;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -15,15 +16,13 @@ namespace Glossary.Tests
         [Fact]
         public async Task Handle_Delete_ByAuthor_Deletes_And_Saves()
         {
-            var repo = Substitute.For<ITermRepository>();
-            var uow = Substitute.For<IUnitOfWork>();
-            var auth = Substitute.For<ICurrentUser>();
+            var (repo, uow, auth) = TestHelper.MockResources();
+
 
             var authorId = Guid.NewGuid();
             auth.UserId.Returns(authorId);
 
             var term = Term.Create("name", new string('x', 40), authorId);
-
             repo.GetByIdAsync(term.Id, Arg.Any<CancellationToken>()).Returns(term);
 
             var handler = new DeleteTermHendler(repo, uow, auth);
@@ -38,15 +37,14 @@ namespace Glossary.Tests
         [Fact]
         public async Task Handle_Delete_ByNonAuthor_Throws_And_DoesNotDelete()
         {
-            var repo = Substitute.For<ITermRepository>();
-            var uow = Substitute.For<IUnitOfWork>();
-            var auth = Substitute.For<ICurrentUser>();
+            var (repo, uow, auth) = TestHelper.MockResources();
 
             var authorId = Guid.NewGuid();
             var otherId = Guid.NewGuid();
             auth.UserId.Returns(otherId);
 
             var term = Term.Create("name", new string('x', 40), authorId);
+
             repo.GetByIdAsync(term.Id, Arg.Any<CancellationToken>()).Returns(term);
 
             var handler = new DeleteTermHendler(repo, uow, auth);
